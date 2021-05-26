@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, request, jsonify, abort
 from sqlalchemy import exc
 import json
@@ -17,7 +18,7 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-# db_drop_and_create_all()
+#db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -29,6 +30,27 @@ CORS(app)
         or appropriate status code indicating reason for failure
 '''
 
+@app.route('/')
+def home():
+
+    return "Home Page"
+
+
+
+@app.route('/drinks')
+def drinks():
+    
+    print('In drinks')
+    all_drinks = Drink.query.all()
+
+    
+    return jsonify({
+        'success': True,
+        'drinks': [drink.short() for drink in all_drinks]
+    }), 200
+
+
+
 
 '''
 @TODO implement endpoint
@@ -38,6 +60,18 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+
+@app.route('/drinks-detail', methods=['GET'])
+@requires_auth('get:drinks-detail')
+def get_drink_detail(payload):
+    
+    all_drinks = Drink.query.all()
+
+    
+    return jsonify({
+        'success': True,
+        'drinks': [drink.long() for drink in all_drinks]
+    }), 200
 
 
 '''

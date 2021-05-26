@@ -31,7 +31,25 @@ class AuthError(Exception):
     return the token part of the header
 '''
 def get_token_auth_header():
-   raise Exception('Not Implemented')
+    
+    auth = request.headers.get('Authorization', None)
+    print('Got it headers')
+
+    if not auth:
+        return 'Hello'
+        
+        raise AuthError({
+            'code': 'authorization_header_missing',
+            'description': 'Authorization header is expected.'
+        }, 401)
+
+
+    
+    parts = auth.split()   
+    token = parts[1]
+    print(token)
+
+    return token
 
 '''
 @TODO implement check_permissions(permission, payload) method
