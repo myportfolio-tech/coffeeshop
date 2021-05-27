@@ -33,7 +33,7 @@ class AuthError(Exception):
 def get_token_auth_header():
     
     auth = request.headers.get('Authorization', None)
-    print('Got it headers')
+
 
     if not auth:
         
@@ -44,6 +44,9 @@ def get_token_auth_header():
    
     parts = auth.split()   
     token = parts[1]
+
+    # print('TOKEN')
+    # print(token)
 
     return token
 
@@ -150,7 +153,7 @@ def verify_decode_jwt(token):
                 'description': 'Unable to find the appropriate key.'
             }, 400)
     
-    raise Exception('Not Implemented')
+
 
 # '''
 # @TODO implement @requires_auth(permission) decorator method
