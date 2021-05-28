@@ -70,15 +70,15 @@ def get_drink_detail(payload):
     }), 200
 
 
-'''
-@TODO implement endpoint
-    POST /drinks
-        it should create a new row in the drinks table
-        it should require the 'post:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
-        or appropriate status code indicating reason for failure
-'''
+# '''
+# @TODO implement endpoint
+#     POST /drinks
+#         it should create a new row in the drinks table
+#         it should require the 'post:drinks' permission
+#         it should contain the drink.long() data representation
+#     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
+#         or appropriate status code indicating reason for failure
+# '''
 
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
@@ -116,6 +116,33 @@ def post_drink(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
+
+@app.route('/drinks/<int:drink_id>', methods=['PATCH'])
+@requires_auth('post:drinks')
+def patch_drink(payload, drink_id):
+    
+    data = request.get_json()
+    drink = Drink.query.get_or_404(drink_id)
+    
+
+    drink.title = data.get('title', 'No Title')
+    drink.recipe = json.dumps(data.get('recipe'))
+    drink.update()
+
+    print(data.get('id'))
+    print(data.get('title'))
+    print(data.get('recipe'))
+
+    all_drinks = Drink.query.all()
+
+    
+    return jsonify({
+        'success': True,
+        'drinks': drink.long(),
+        'request': data
+    }), 200
+
+
 
 
 '''
